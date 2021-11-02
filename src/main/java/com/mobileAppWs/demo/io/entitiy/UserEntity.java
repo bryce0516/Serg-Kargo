@@ -30,7 +30,7 @@ public class UserEntity implements Serializable {
   @Column(nullable = false, length = 120, unique = true)
   private String email;
 
-  @Column(nullable = false, length = 20)
+  @Column(nullable = false, length = 120)
   private String encryptedPassword;
 
   private String emailVerificationToken;
