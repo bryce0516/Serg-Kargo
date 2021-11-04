@@ -5,6 +5,7 @@ import com.mobileAppWs.demo.common.dto.UserDto;
 import com.mobileAppWs.demo.io.entitiy.UserEntity;
 import com.mobileAppWs.demo.repository.UserRepository;
 import com.mobileAppWs.demo.services.UserService;
+import org.springframework.beans.BeanInfoFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -68,4 +69,15 @@ public class UserServiceImpl implements UserService {
 
     return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
   }
+
+  @Override
+  public UserDto getUserByUserId(String userId){
+    UserDto returnValue = new UserDto();
+    UserEntity userEntity = userRepository.findByUserId(userId);
+    if(userEntity == null) throw new UsernameNotFoundException(userId);
+
+    BeanUtils.copyProperties(userEntity, returnValue);
+    return returnValue;
+  }
+
 }
