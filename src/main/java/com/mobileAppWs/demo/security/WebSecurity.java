@@ -14,7 +14,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   private final UserService userDetailsService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder){
+  public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
     this.userDetailsService = userDetailsService;
     this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
@@ -22,7 +22,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
-    http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll().anyRequest().authenticated().and().addFilter(new AuthenticationFilter(authenticationManager()));
+    http.csrf()
+        .disable()
+        .authorizeRequests()
+        .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .addFilter(getAuthenticationFilter());
   }
 
   @Override
@@ -30,4 +38,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
   }
 
+  public AuthenticationFilter getAuthenticationFilter() throws Exception {
+    final AuthenticationFilter filter = new AuthenticationFilter(authenticationManager());
+    filter.setFilterProcessesUrl("/users/login");
+    return filter;
+  }
 }
