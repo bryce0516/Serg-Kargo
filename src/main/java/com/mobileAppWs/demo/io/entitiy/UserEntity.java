@@ -2,10 +2,7 @@ package com.mobileAppWs.demo.io.entitiy;
 
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 
@@ -14,7 +11,8 @@ public class UserEntity implements Serializable {
   private static final long serialVersionUID = 9087921753448591939L;
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private long id;
 
 
