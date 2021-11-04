@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserDto createUser(UserDto user) {
 
-    if(userRepository.findUserByEmail(user.getEmail()) != null) throw new RuntimeException("Record already exists");
+    if(userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("Record already exists");
 
     UserEntity userEntity = new UserEntity();
     BeanUtils.copyProperties(user, userEntity);
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserDto getUser(String email){
 
-    UserEntity userEntity = userRepository.findUserByEmail(email);
+    UserEntity userEntity = userRepository.findByEmail(email);
 
     if(userEntity == null) throw new UsernameNotFoundException(email);
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    UserEntity userEntity = userRepository.findUserByEmail(email);
+    UserEntity userEntity = userRepository.findByEmail(email);
     if(userEntity == null) throw new UsernameNotFoundException(email);
 
 
