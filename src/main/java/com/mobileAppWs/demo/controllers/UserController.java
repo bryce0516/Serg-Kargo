@@ -6,8 +6,10 @@ import com.mobileAppWs.demo.models.request.UserDetailsRequestModel;
 import com.mobileAppWs.demo.models.response.ErrorMessages;
 import com.mobileAppWs.demo.models.response.UserRest;
 import com.mobileAppWs.demo.services.UserService;
+import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,14 +32,14 @@ public class UserController {
   }
 
   @PostMapping(
-          consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
-          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
-  )
+      consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 
     UserRest returnValue = new UserRest();
 
-    if(userDetails.getFirstName().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+    if (userDetails.getFirstName().isEmpty())
+      throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
     UserDto userDto = new UserDto();
     BeanUtils.copyProperties(userDetails, userDto);
@@ -48,9 +50,20 @@ public class UserController {
     return returnValue;
   }
 
-  @PatchMapping
-  public String updateUser() {
-    return "update user was called";
+  @PatchMapping(
+      path = "/{id}",
+      consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+  public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
+    UserRest returnValue = new UserRest();
+
+    UserDto userDto = new UserDto();
+
+    BeanUtils.copyProperties(userDetails, userDto);
+
+    UserDto updateUser = userService.updateUser(id, userDto);
+    BeanUtils.copyProperties(updateUser, returnValue);
+    return returnValue;
   }
 
   @DeleteMapping
