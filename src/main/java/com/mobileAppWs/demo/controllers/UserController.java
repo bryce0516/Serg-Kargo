@@ -4,6 +4,8 @@ import com.mobileAppWs.demo.common.dto.UserDto;
 import com.mobileAppWs.demo.exceptions.UserServiceException;
 import com.mobileAppWs.demo.models.request.UserDetailsRequestModel;
 import com.mobileAppWs.demo.models.response.ErrorMessages;
+import com.mobileAppWs.demo.models.response.OperationStatusModel;
+import com.mobileAppWs.demo.models.response.RequestOperationStatus;
 import com.mobileAppWs.demo.models.response.UserRest;
 import com.mobileAppWs.demo.services.UserService;
 import org.apache.catalina.User;
@@ -66,8 +68,19 @@ public class UserController {
     return returnValue;
   }
 
-  @DeleteMapping
-  public String deleteUser() {
-    return "delete user was called";
+  @DeleteMapping(
+          path = "/{id}",
+          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+  )
+  public OperationStatusModel deleteUser(@PathVariable String id) {
+
+    OperationStatusModel returnValue = new OperationStatusModel();
+
+    returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+    userService.deleteUser(id);
+    returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+
+    return returnValue;
   }
 }
