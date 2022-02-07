@@ -24,16 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+  public class UserServiceImpl implements UserService {
 
-  @Autowired
-  UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
-  @Autowired
-  Utils utils;
+    @Autowired
+    Utils utils;
 
-  @Autowired
-  BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
   public UserDto createUser(UserDto user) {
