@@ -2,6 +2,7 @@ package com.mobileAppWs.demo.test.model;
 
 public class CommonResult {
 
+
   private boolean success;
   private int code;
   private String msg;
@@ -28,6 +29,15 @@ public class CommonResult {
 
   public void setMsg(String msg) {
     this.msg = msg;
+  }
+
+  @Override
+  public String toString() {
+    return "CommonResult{" +
+            "success=" + success +
+            ", code=" + code +
+            ", msg='" + msg + '\'' +
+            '}';
   }
 
 
