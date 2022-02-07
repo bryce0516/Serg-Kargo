@@ -190,7 +190,7 @@ import javax.persistence.*;
                         @ColumnResult(name = "qty", type = String.class),
                         @ColumnResult(name = "amt", type = String.class),
                         @ColumnResult(name = "payback", type = String.class),
-                        @ColumnResult(name = "main_gb", type = String.class),
+                        @ColumnResult(name = "maingb", type = String.class),
                         @ColumnResult(name = "init", type = String.class),
                         @ColumnResult(name = "upsellyn", type = String.class),
                         @ColumnResult(name = "assi_prod_cd", type = String.class)
@@ -199,7 +199,7 @@ import javax.persistence.*;
 
 @NamedNativeQuery(name = "findNewProductList",
   query = "SELECT \n"+
-          ":certno AS CERTNO, refalph, refnum, cd, cdnm, plinm, commt, qty, amt, payback, main_gb, init, upsellyn,assi_prod_cd from product",
+          "* from product",
   resultClass = ProductEntity.class,
   resultSetMapping = "NewProductListMapping"
 )
