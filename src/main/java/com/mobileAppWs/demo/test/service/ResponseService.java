@@ -2,6 +2,7 @@ package com.mobileAppWs.demo.test.service;
 
 import com.mobileAppWs.demo.test.model.CommonResult;
 import com.mobileAppWs.demo.test.model.ListResult;
+import com.mobileAppWs.demo.test.model.SingleResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,13 @@ public class ResponseService {
     setSuccessResult(result);
     result.setList(list);
 
+    return result;
+  }
+
+  public <T> SingleResult<T> getSingleResult(T data) {
+    SingleResult<T> result = new SingleResult<>();
+    setSuccessResult(result);
+    result.setData(data);
     return result;
   }
 }

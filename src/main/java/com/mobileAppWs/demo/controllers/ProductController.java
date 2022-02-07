@@ -28,7 +28,7 @@ public class ProductController {
           @RequestParam(value = "certno") String certno,
           @RequestParam(value = "functrlno") String functrlno
   ) {
-    return responseService.getListResult(productServiceImpl.getNewProductList(certno,functrlno ));
+    return responseService.getSingleResult(productServiceImpl.getNewProductList(certno,functrlno ));
   };
 
 //   @GetMapping(path="/product/new")
