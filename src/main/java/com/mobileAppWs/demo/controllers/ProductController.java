@@ -16,10 +16,11 @@ public class ProductController {
     this.responseService = responseService;
   }
 
- // @GetMapping(path="/product/new")
- // public CommonResult getNewProductListData() {
- //   return responseService.getListResult()
- //  };
+//  @GetMapping(path="/product/new")
+//  public CommonResult getNewProductListData() {
+//    return responseService.getListResult()
+//   };
+
    @GetMapping(path="/product/new")
    public String getNewProductListData() {
      return "helloworld";
