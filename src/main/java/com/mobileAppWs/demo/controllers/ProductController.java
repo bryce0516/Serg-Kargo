@@ -31,8 +31,4 @@ public class ProductController {
     return responseService.getSingleResult(productServiceImpl.getNewProductList(certno,functrlno ));
   };
 
-//   @GetMapping(path="/product/new")
-//   public String getNewProductListData() {
-//     return "helloworld";
-//    };
 }
