@@ -26,6 +26,7 @@ public class FileController {
         this.fileService = fileService;
     }
 
+    @CrossOrigin(origins = {"*"})
     @GetMapping("{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(@PathVariable String filename) throws IOException {
@@ -33,6 +34,7 @@ public class FileController {
         Path path = file.getFile().toPath();
 
         return ResponseEntity.ok()
+
                 .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
