@@ -40,7 +40,15 @@ public class FileController {
 
     @PostMapping(value = "/upload")
     public String uploadFile(@RequestParam("file")MultipartFile file) throws IOException {
+        try {
+            String result = fileService.storeFile(file);
+            logger.info("result ==>" + result);
 
-        return "Success";
+            return "Success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Fail";
+        }
+
     }
 }
