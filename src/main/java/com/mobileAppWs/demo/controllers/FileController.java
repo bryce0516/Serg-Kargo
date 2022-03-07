@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,8 +36,11 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
-
     }
 
+    @PostMapping(value = "/upload")
+    public String uploadFile(@RequestParam("file")MultipartFile file) throws IOException {
 
+        return "Success";
+    }
 }
