@@ -29,6 +29,7 @@ public class FileService {
             Resource resource = new UrlResource(file.toUri());
             logger.info("file ==== > " + file);
             logger.info("resource ==== > " + resource);
+            logger.info("resource ==== > " + resource.exists()+ " \\ " +resource.isReadable());
             if(resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
@@ -46,10 +47,11 @@ public class FileService {
         }
 
         Path target = Paths.get(filesPath).toAbsolutePath().normalize();
-        logger.info(" ===> check target " + target);
+        Path targetLocation = Paths.get(target.toString(),file.getOriginalFilename()) ;
+        logger.info(" ===> check target " + targetLocation);
 
         try {
-            Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         } catch(Exception e) {
             throw new Exception();
         }
