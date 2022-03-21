@@ -2,6 +2,7 @@ package com.mobileAppWs.demo.models.response;
 
 import org.springframework.hateoas.RepresentationModel;
 
+//public class AddressesRest extends RepresentationModel<AddressesRest>
 public class AddressesRest extends RepresentationModel<AddressesRest> {
     private String addressId;
     private String city;
