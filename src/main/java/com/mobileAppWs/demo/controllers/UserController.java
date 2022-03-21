@@ -26,6 +26,7 @@ public class UserController {
 
   @Autowired UserService userService;
   @Autowired AddressService addressService;
+
   @GetMapping(
       path = "/{id}",
       produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -55,7 +56,7 @@ public class UserController {
 
     UserDto createdUser = userService.createUser(userDto);
     returnValue = modelMapper.map(createdUser, UserRest.class);
-//    BeanUtils.copyProperties(createdUser, returnValue);
+    //    BeanUtils.copyProperties(createdUser, returnValue);
 
     return returnValue;
   }
@@ -108,16 +109,16 @@ public class UserController {
     return returnValue;
   }
 
-  //localhost/java-api/users/{id}/addresses
+  // localhost/java-api/users/{userid}/addresses
   @GetMapping(
-          path = "/{id}/addresses",
-          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+      path = "/{id}/addresses",
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public List<AddressesRest> getUserAddresses(@PathVariable String id) {
     List<AddressesRest> returnValue = new ArrayList<>();
 
     List<AddressDTO> addressesDto = addressService.getAddress(id);
 
-    if(addressesDto !=null && !addressesDto.isEmpty()) {
+    if (addressesDto != null && !addressesDto.isEmpty()) {
       Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
 
       returnValue = new ModelMapper().map(addressesDto, listType);
@@ -126,4 +127,17 @@ public class UserController {
     return returnValue;
   }
 
+  // localhost/java-api/users/{userid}/addresses/{addressesid}
+  @GetMapping(
+      path = "/{id}/addresses/{addressId}",
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+  public AddressesRest getUserAddress(@PathVariable String addressId) {
+
+    AddressDTO addressDTO = addressService.getAddressSingle(addressId);
+
+    ModelMapper modelMapper = new ModelMapper();
+
+
+    return modelMapper.map(addressDTO, AddressesRest.class);
+  }
 }

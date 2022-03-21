@@ -8,4 +8,5 @@ import java.util.List;
 @Service
 public interface AddressService {
   List<AddressDTO> getAddress(String userId);
+  AddressDTO getAddressSingle(String AddressId);
 }
