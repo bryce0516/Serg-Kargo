@@ -1,12 +1,14 @@
 package com.mobileAppWs.demo.impl;
 
 import com.mobileAppWs.demo.common.Utils;
+import com.mobileAppWs.demo.common.dto.AddressDTO;
 import com.mobileAppWs.demo.common.dto.UserDto;
 import com.mobileAppWs.demo.exceptions.UserServiceException;
 import com.mobileAppWs.demo.io.entitiy.UserEntity;
 import com.mobileAppWs.demo.models.response.ErrorMessages;
 import com.mobileAppWs.demo.repository.UserRepository;
 import com.mobileAppWs.demo.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanInfoFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,16 @@ import java.util.List;
 
     if(userRepository.findByEmail(user.getEmail()) != null) throw new RuntimeException("Record already exists");
 
-    UserEntity userEntity = new UserEntity();
-    BeanUtils.copyProperties(user, userEntity);
+    for(int i=0; i <user.getAddresses().size(); i++){
+      AddressDTO address = user.getAddresses().get(i);
+      address.setUserDetails(user);
+      address.setAddressId(utils.generateAddressId(30));
+      user.getAddresses().set(i, address);
+    }
+    // UserEntity userEntity = new UserEntity()
+//    BeanUtils.copyProperties(user, userEntity);
+    ModelMapper modelMapper = new ModelMapper();
+    UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
     String publicUserId = utils.generateUserId(30);
 
@@ -50,8 +60,9 @@ import java.util.List;
 
     UserEntity storedUserDetails = userRepository.save(userEntity);
 
-    UserDto returnValue = new UserDto();
-    BeanUtils.copyProperties(storedUserDetails, returnValue);
+//    UserDto returnValue = new UserDto();
+//    BeanUtils.copyProperties(storedUserDetails, returnValue);
+    UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 
     return returnValue;
   }
