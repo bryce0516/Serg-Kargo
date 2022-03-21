@@ -108,7 +108,7 @@ public class UserController {
     return returnValue;
   }
 
-  //localhost/java-api/users/{id}/{addresses}
+  //localhost/java-api/users/{id}/addresses
   @GetMapping(
           path = "/{id}/addresses",
           produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
