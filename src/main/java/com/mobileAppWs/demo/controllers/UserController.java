@@ -9,6 +9,7 @@ import com.mobileAppWs.demo.models.response.RequestOperationStatus;
 import com.mobileAppWs.demo.models.response.UserRest;
 import com.mobileAppWs.demo.services.UserService;
 import org.apache.catalina.User;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,12 +23,11 @@ import java.util.List;
 @RequestMapping("users")
 public class UserController {
 
-  @Autowired
-  UserService userService;
+  @Autowired UserService userService;
 
   @GetMapping(
-          path = "/{id}",
-          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+      path = "/{id}",
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public UserRest getUser(@PathVariable String id) {
     UserRest returnValue = new UserRest();
 
@@ -38,8 +38,8 @@ public class UserController {
   }
 
   @PostMapping(
-          consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
-          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+      consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception {
 
     UserRest returnValue = new UserRest();
@@ -47,8 +47,10 @@ public class UserController {
     if (userDetails.getFirstName().isEmpty())
       throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
-    UserDto userDto = new UserDto();
-    BeanUtils.copyProperties(userDetails, userDto);
+    //    UserDto userDto = new UserDto();
+    //    BeanUtils.copyProperties(userDetails, userDto);
+    ModelMapper modelMapper = new ModelMapper();
+    UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
     UserDto createdUser = userService.createUser(userDto);
     BeanUtils.copyProperties(createdUser, returnValue);
@@ -57,10 +59,11 @@ public class UserController {
   }
 
   @PatchMapping(
-          path = "/{id}",
-          consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
-          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-  public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
+      path = "/{id}",
+      consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+  public UserRest updateUser(
+      @PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) {
     UserRest returnValue = new UserRest();
 
     UserDto userDto = new UserDto();
@@ -73,9 +76,8 @@ public class UserController {
   }
 
   @DeleteMapping(
-          path = "/{id}",
-          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
-  )
+      path = "/{id}",
+      produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public OperationStatusModel deleteUser(@PathVariable String id) {
 
     OperationStatusModel returnValue = new OperationStatusModel();
@@ -88,16 +90,14 @@ public class UserController {
     return returnValue;
   }
 
-  @GetMapping(
-          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
-  )
+  @GetMapping(produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
   public List<UserRest> getUsers(
-          @RequestParam(value = "page", defaultValue = "0") int page,
-          @RequestParam(value = "limit", defaultValue = "25") int limit) {
+      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "limit", defaultValue = "25") int limit) {
     List<UserRest> returnValue = new ArrayList<>();
-    List<UserDto> users = userService.getUsers(page,limit);
+    List<UserDto> users = userService.getUsers(page, limit);
 
-    for(UserDto userDto: users) {
+    for (UserDto userDto : users) {
       UserRest userModel = new UserRest();
       BeanUtils.copyProperties(userDto, userModel);
       returnValue.add(userModel);
