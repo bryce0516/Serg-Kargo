@@ -1,21 +1,22 @@
 package com.mobileAppWs.demo.controllers;
 
+import com.mobileAppWs.demo.common.dto.AddressDTO;
 import com.mobileAppWs.demo.common.dto.UserDto;
 import com.mobileAppWs.demo.exceptions.UserServiceException;
 import com.mobileAppWs.demo.models.request.UserDetailsRequestModel;
-import com.mobileAppWs.demo.models.response.ErrorMessages;
-import com.mobileAppWs.demo.models.response.OperationStatusModel;
-import com.mobileAppWs.demo.models.response.RequestOperationStatus;
-import com.mobileAppWs.demo.models.response.UserRest;
+import com.mobileAppWs.demo.models.response.*;
+import com.mobileAppWs.demo.services.AddressService;
 import com.mobileAppWs.demo.services.UserService;
 import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
 public class UserController {
 
   @Autowired UserService userService;
-
+  @Autowired AddressService addressService;
   @GetMapping(
       path = "/{id}",
       produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -106,4 +107,23 @@ public class UserController {
 
     return returnValue;
   }
+
+  //localhost/java-api/users/{id}/{addresses}
+  @GetMapping(
+          path = "/{id}/addresses",
+          produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+  public List<AddressesRest> getUserAddresses(@PathVariable String id) {
+    List<AddressesRest> returnValue = new ArrayList<>();
+
+    List<AddressDTO> addressesDto = addressService.getAddress(id);
+
+    if(addressesDto !=null && !addressesDto.isEmpty()) {
+      Type listType = new TypeToken<List<AddressesRest>>() {}.getType();
+
+      returnValue = new ModelMapper().map(addressesDto, listType);
+    }
+
+    return returnValue;
+  }
+
 }
