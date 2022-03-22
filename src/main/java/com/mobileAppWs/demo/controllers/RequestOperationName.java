@@ -1,5 +1,5 @@
 package com.mobileAppWs.demo.controllers;
 
 public enum RequestOperationName {
-    DELETE
+    DELETE, VERIFY_EMAIL
 }

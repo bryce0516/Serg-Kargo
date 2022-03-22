@@ -44,16 +44,16 @@ import java.util.List;
 
     for(int i=0; i <user.getAddresses().size(); i++){
       AddressDTO address = user.getAddresses().get(i);
-      address.setUserDetails(user);
-      address.setAddressId(utils.generateAddressId(30));
-      user.getAddresses().set(i, address);
-    }
-    // UserEntity userEntity = new UserEntity()
+    address.setUserDetails(user);
+    address.setAddressId(utils.generateAddressId(30));
+    user.getAddresses().set(i, address);
+  }
+  // UserEntity userEntity = new UserEntity()
 //    BeanUtils.copyProperties(user, userEntity);
-    ModelMapper modelMapper = new ModelMapper();
-    UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+  ModelMapper modelMapper = new ModelMapper();
+  UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
-    String publicUserId = utils.generateUserId(30);
+  String publicUserId = utils.generateUserId(30);
 
     userEntity.setUserId(publicUserId);
     userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -137,6 +137,24 @@ import java.util.List;
       UserDto userDto = new UserDto();
       BeanUtils.copyProperties(userEntity, userDto);
       returnValue.add(userDto);
+    }
+    return returnValue;
+  }
+
+  @Override
+  public boolean verifyEmailToken(String token) {
+    boolean returnValue = false;
+    UserEntity userEntity = userRepository.findByEmailVerificationToken(token);
+
+    if(userEntity != null) {
+      boolean hasTokenExipred = Utils.hasTokenExpired(token);
+
+      if(!hasTokenExipred) {
+        userEntity.setEmailVerificationToken(null);
+        userEntity.setEmailVerificationStatus(Boolean.TRUE);
+        userRepository.save(userEntity);
+        returnValue = true;
+      }
     }
     return returnValue;
   }
