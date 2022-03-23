@@ -1,5 +1,6 @@
 package com.mobileAppWs.demo.impl;
 
+import com.mobileAppWs.demo.common.AmazonSES;
 import com.mobileAppWs.demo.common.Utils;
 import com.mobileAppWs.demo.common.dto.AddressDTO;
 import com.mobileAppWs.demo.common.dto.UserDto;
@@ -62,6 +63,9 @@ public class UserServiceImpl implements UserService {
     //    UserDto returnValue = new UserDto();
     //    BeanUtils.copyProperties(storedUserDetails, returnValue);
     UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
+
+    //
+    new AmazonSES().verifyEmail(returnValue);
 
     return returnValue;
   }
