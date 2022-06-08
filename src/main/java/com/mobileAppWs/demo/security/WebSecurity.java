@@ -1,6 +1,8 @@
 package com.mobileAppWs.demo.security;
 
 import com.mobileAppWs.demo.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +16,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
   private final UserService userDetailsService;
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
+  private static final Logger logger = LoggerFactory.getLogger(WebSecurity.class);
 
   public WebSecurity(UserService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
     this.userDetailsService = userDetailsService;

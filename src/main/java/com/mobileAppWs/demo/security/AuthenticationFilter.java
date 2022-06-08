@@ -7,6 +7,8 @@ import com.mobileAppWs.demo.models.request.UserLoginRequestModel;
 import com.mobileAppWs.demo.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,7 +26,7 @@ import java.util.Date;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   private final AuthenticationManager authenticationManager;
-
+  private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
   public AuthenticationFilter(AuthenticationManager authenticationManager) {
     this.authenticationManager = authenticationManager;
   }
@@ -35,6 +37,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
       UserLoginRequestModel creds = new ObjectMapper()
               .readValue(req.getInputStream(), UserLoginRequestModel.class);
 
+              logger.info("creds ==== > " + creds.getEmail() +creds.getPassword());
       return authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
                       creds.getEmail(),
@@ -50,6 +53,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   @Override
   protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException, ServletException {
     String userName = ((User) auth.getPrincipal()).getUsername();
+    logger.info("userName ==== > " + userName);
     String token = Jwts.builder()
             .setSubject(userName)
             .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))

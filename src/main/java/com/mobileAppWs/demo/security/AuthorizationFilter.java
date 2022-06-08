@@ -2,6 +2,8 @@ package com.mobileAppWs.demo.security;
 
 
 import io.jsonwebtoken.Jwts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +20,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
   public AuthorizationFilter(AuthenticationManager authManager){
     super(authManager);
   }
-
+  private static final Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
     String header = req.getHeader(SecurityConstants.HEADER_STRING);
@@ -43,7 +45,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
               .parseClaimsJws(token)
               .getBody()
               .getSubject();
-
+      logger.info("UsernamePasswordAuthenticationToken user ==== > " + user);
       if(user != null) {
         return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
       }
