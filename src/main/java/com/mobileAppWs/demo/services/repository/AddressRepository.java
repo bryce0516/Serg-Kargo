@@ -1,4 +1,4 @@
-package com.mobileAppWs.demo.repository;
+package com.mobileAppWs.demo.services.repository;
 
 
 import com.mobileAppWs.demo.io.entitiy.AddressEntity;
